@@ -8,7 +8,6 @@
 #include <stdarg.h>
 #include <stdlib.h>
 #include <pwd.h>
-#include <sys/stat.h>
 #include "utils.h"
 
 bool verbose = false;
@@ -18,7 +17,7 @@ int copy_file(const char *file_name, const char *destination, mode_t permissions
     int src_file_descriptor, dest_file_descriptor;
     ssize_t num_bytes_read;
     unsigned char buffer[BUFFER_SIZE];
-    int status = STATUS_OK;
+    int status = EXIT_SUCCESS;
 
     // Open source file and create copy file
     src_file_descriptor = open(file_name, O_RDONLY);
@@ -30,7 +29,7 @@ int copy_file(const char *file_name, const char *destination, mode_t permissions
     }
 
     // While bytes are successfully being read into buffer
-    while (num_bytes_read = read(src_file_descriptor, buffer, sizeof buffer), num_bytes_read > 0 && status == STATUS_OK) {
+    while (num_bytes_read = read(src_file_descriptor, buffer, sizeof buffer), num_bytes_read > 0 && status == EXIT_SUCCESS) {
 
         // Try writing to the file
         ssize_t num_bytes_written = write(dest_file_descriptor, buffer, (size_t) num_bytes_read);
@@ -106,7 +105,7 @@ char* get_home_dir() {
 
 /// Checks whether or not a file exists.
 bool check_file_exists(const char *file_name) {
-    struct stat config_stats = {};
+    struct stat config_stats;
 
     if (stat(file_name, &config_stats) == -1) {
         return false;

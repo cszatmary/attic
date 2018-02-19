@@ -57,7 +57,7 @@ int generate_new_config() {
 
     config_destroy(&cfg);
 
-    return STATUS_OK;
+    return EXIT_SUCCESS;
 }
 
 int load_config() {
@@ -79,7 +79,7 @@ int load_config() {
     verbose_print("Creating config struct\n");
     config = malloc(sizeof(attic_config));
 
-    if (read_config_values(&cfg, config) != STATUS_OK) {
+    if (read_config_values(&cfg, config) != EXIT_SUCCESS) {
         verbose_print("Unable to successfully read the config, aborting\n");
         verbose_print("Freeing config struct\n");
         free(config);
@@ -90,7 +90,7 @@ int load_config() {
     // Assign config to global constant pointer so that it can be read from anywhere but not modified
     config_data = config;
 
-    return STATUS_OK;
+    return EXIT_SUCCESS;
 }
 
 int read_config_values(config_t *cfg, attic_config *config_struct) {
@@ -105,7 +105,7 @@ int read_config_values(config_t *cfg, attic_config *config_struct) {
     }
 
     verbose_print("Finished reading config values successfully\n");
-    return STATUS_OK;
+    return EXIT_SUCCESS;
 }
 
 void free_config() {

@@ -7,6 +7,7 @@
 
 #include <stdio.h>
 #include <stdbool.h>
+#include <sys/stat.h>
 
 #define ALL_RW_PERM 0666
 #define ALL_RX_PERM 0555
@@ -15,7 +16,6 @@
 
 #define BUFFER_SIZE 8192
 
-#define STATUS_OK 0
 #define ERROR_READ -1
 #define ERROR_WRITE -2
 #define ERROR_CREATE -3
