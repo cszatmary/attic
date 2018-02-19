@@ -3,4 +3,6 @@ project(attic C)
 
 set(CMAKE_C_STANDARD 11)
 
-add_executable(attic main.c)
+include_directories(src)
+
+add_executable(attic main.c src/utils.c src/utils.h)
