@@ -5,4 +5,5 @@ set(CMAKE_C_STANDARD 11)
 
 include_directories(src)
 
-add_executable(attic main.c src/utils.c src/utils.h)
+add_executable(attic main.c src/utils.c src/utils.h src/config.c src/config.h)
+target_link_libraries(attic config)
