@@ -5,6 +5,8 @@
 #ifndef ATTIC_UTILS_H
 #define ATTIC_UTILS_H
 
+#include <stdbool.h>
+
 #define ALL_RW_PERM 0666
 #define ALL_RX_PERM 0555
 #define MAX_RW_PERM 0766
@@ -18,5 +20,7 @@
 #define ERROR_CREATE -3
 
 int copy_file(const char *file_name, const char *destination, mode_t permissions);
+void set_verbose(bool value);
+int verbose_print(const char *restrict format, ...);
 
 #endif //ATTIC_UTILS_H

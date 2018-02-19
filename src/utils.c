@@ -5,7 +5,11 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <errno.h>
+#include <stdarg.h>
+#include <stdio.h>
 #include "utils.h"
+
+bool verbose = false;
 
 /// Creates a copy of a file at the given destination.
 int copy_file(const char *file_name, const char *destination, mode_t permissions) {
@@ -50,6 +54,23 @@ int copy_file(const char *file_name, const char *destination, mode_t permissions
     // This way any errors from close are ignored as they generally are of no consequence
     // any previous errors are of greater concern
     errno = error;
+
+    return status;
+}
+
+void set_verbose(bool value) {
+    verbose = value;
+}
+
+int verbose_print(const char *restrict format, ...) {
+    if (!verbose) {
+        return 0;
+    }
+
+    va_list args;
+    va_start(args, format);
+    int status = vprintf(format, args);
+    va_end(args);
 
     return status;
 }
