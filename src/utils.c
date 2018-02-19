@@ -7,6 +7,8 @@
 #include <errno.h>
 #include <stdarg.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <pwd.h>
 #include "utils.h"
 
 bool verbose = false;
@@ -73,4 +75,14 @@ int verbose_print(const char *restrict format, ...) {
     va_end(args);
 
     return status;
+}
+
+char* get_home_dir() {
+    char *home_dir = getenv("HOME");
+
+    if (home_dir == NULL) {
+        home_dir = getpwuid(getuid())->pw_dir;
+    }
+
+    return home_dir;
 }

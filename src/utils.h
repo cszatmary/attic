@@ -22,5 +22,6 @@
 int copy_file(const char *file_name, const char *destination, mode_t permissions);
 void set_verbose(bool value);
 int verbose_print(const char *restrict format, ...);
+char* get_home_dir();
 
 #endif //ATTIC_UTILS_H
