@@ -6,9 +6,9 @@
 #include <unistd.h>
 #include <errno.h>
 #include <stdarg.h>
-#include <stdio.h>
 #include <stdlib.h>
 #include <pwd.h>
+#include <sys/stat.h>
 #include "utils.h"
 
 bool verbose = false;
@@ -60,10 +60,26 @@ int copy_file(const char *file_name, const char *destination, mode_t permissions
     return status;
 }
 
+/// Toggles verbose mode on or off
 void set_verbose(bool value) {
     verbose = value;
 }
 
+/// Writes output of a given format to the given file if verbose mode is on
+int fverbose_print(FILE *stream, const char *restrict format, ...) {
+    if (!verbose) {
+        return 0;
+    }
+
+    va_list args;
+    va_start(args, format);
+    int status = vfprintf(stream, format, args);
+    va_end(args);
+
+    return status;
+}
+
+/// Writes output of a given format to stdout if verbose mode is on
 int verbose_print(const char *restrict format, ...) {
     if (!verbose) {
         return 0;
@@ -77,6 +93,7 @@ int verbose_print(const char *restrict format, ...) {
     return status;
 }
 
+/// Returns the absolute path to the user's home directory
 char* get_home_dir() {
     char *home_dir = getenv("HOME");
 
@@ -85,4 +102,15 @@ char* get_home_dir() {
     }
 
     return home_dir;
+}
+
+/// Checks whether or not a file exists.
+bool check_file_exists(const char *file_name) {
+    struct stat config_stats = {};
+
+    if (stat(file_name, &config_stats) == -1) {
+        return false;
+    } else {
+        return true;
+    }
 }
