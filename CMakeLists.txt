@@ -1,9 +1,12 @@
 cmake_minimum_required(VERSION 3.9)
 project(attic C)
+set(PROJECT_NAME attic)
 
 set(CMAKE_C_STANDARD 11)
 
-include_directories(src)
+set(INCLUDE_DIR src src/commands)
 
-add_executable(attic main.c src/utils.c src/utils.h src/config.c src/config.h)
-target_link_libraries(attic config)
+add_executable(${PROJECT_NAME} main.c src/utils.c src/utils.h src/config.c src/config.h src/commands/install.c src/commands/install.h)
+
+target_include_directories(${PROJECT_NAME} PRIVATE ${INCLUDE_DIR})
+target_link_libraries(${PROJECT_NAME} config)
