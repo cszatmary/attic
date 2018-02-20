@@ -15,6 +15,7 @@
 #define MAX_RX_PERM 0755
 
 #define BUFFER_SIZE 8192
+#define PATH_SIZE 512
 
 #define ERROR_READ -1
 #define ERROR_WRITE -2
@@ -29,5 +30,6 @@ int fverbose_print(FILE *stream, const char *restrict format, ...);
 int verbose_print(const char *restrict format, ...);
 char* get_home_dir();
 bool check_file_exists(const char *file_name);
+int join_path(const char *path, const char *sub_path, char *full_path, size_t buffer_size);
 
 #endif //ATTIC_UTILS_H
