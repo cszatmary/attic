@@ -3,11 +3,11 @@
 //
 
 #include <stdlib.h>
-#include <config.h>
 #include <unistd.h>
 #include <errno.h>
 #include <string.h>
 #include "install.h"
+#include "config.h"
 #include "utils.h"
 
 /* Steps taken by install function
@@ -26,7 +26,7 @@ int install(const char *file_name) {
 
     // Check if file exists
     if (stat(file_name, &sb) == -1) {
-        fprintf(stderr, "ERROR: File does not exist!\n");
+        fprintf(stderr, "ERROR: %s does not exist!\n", file_name);
         return EXIT_FAILURE;
     }
 
@@ -52,17 +52,43 @@ int install(const char *file_name) {
     join_path(config_data->install_location, file_name, path, PATH_SIZE);
 
     copy_file(file_name, path, MAX_RX_PERM);
-    printf("Symlinking %s to /usr/local/bin\n", file_name);
 
-    char symlink_path[PATH_SIZE];
-    join_path("/usr/local/bin", file_name, symlink_path, PATH_SIZE);
-
-    // Try symlinking to /usr/local/bin and report any errors
-    if (symlink(path, symlink_path) == -1) {
-        fprintf(stderr, "Error occurred while symlinking:\n%s\n", strerror(errno));
+    if (symlink_file(file_name, path) == -1) {
         return EXIT_FAILURE;
     }
 
     printf("Successfully installed %s!\n", file_name);
     return EXIT_SUCCESS;
+}
+
+int link_command(const char *file_name) {
+    verbose_print("Finding %s\n", file_name);
+
+    char path[PATH_SIZE];
+    join_path(config_data->install_location, file_name, path, PATH_SIZE);
+
+    // Check if file exists
+    if (!check_file_exists(path)) {
+        fprintf(stderr, "ERROR: %s does not exist!\nRun `attic install <file>` to install it\n", file_name);
+        return EXIT_FAILURE;
+    }
+
+    return symlink_file(file_name, path) == -1 ? EXIT_FAILURE : EXIT_SUCCESS;
+}
+
+int symlink_file(const char *file_name, const char *full_path) {
+    printf("Symlinking %s to %s\n", file_name, link_path);
+
+    char symlink_path[PATH_SIZE];
+    join_path(link_path, file_name, symlink_path, PATH_SIZE);
+
+    int status = symlink(full_path, symlink_path);
+
+    if (status == -1) {
+        fprintf(stderr, "Error occurred while symlinking:\n%s\n", strerror(errno));
+    } else {
+        printf("Successfully symlinked %s to %s\n", file_name, symlink_path);
+    }
+
+    return status;
 }
