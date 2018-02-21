@@ -26,7 +26,7 @@ int install(const char *file_name) {
 
     verbose_print("Checking if %s is already installed\n", file_name);
     if (check_file_exists(path)) {
-        printf("%s is already installed!\nTo install a new version use `attic update`\n", file_name);
+        printf("%s is already installed!\nTo install a new version use 'attic update'\n", file_name);
         return EXIT_SUCCESS;
     }
 
@@ -49,7 +49,7 @@ int install(const char *file_name) {
     // Check if the install directory exists
     verbose_print("Checking if install directory exists\n");
     if (!check_file_exists(config_data->install_location)) {
-        fprintf(stderr, "ERROR: %s does not exist!\nRun `attic setup` to set it up\n", config_data->install_location);
+        fprintf(stderr, "ERROR: %s does not exist!\nRun 'attic setup' to set it up\n", config_data->install_location);
         return EXIT_FAILURE;
     }
 
@@ -60,7 +60,7 @@ int install(const char *file_name) {
     copy_file(file_name, path, MAX_RX_PERM);
 
     if (symlink_file(file_name, path) == -1) {
-        printf("Resolve any issues and try again using `attic link`\n");
+        printf("Resolve any issues and try again using 'attic link'\n");
         return EXIT_FAILURE;
     }
 
@@ -76,7 +76,7 @@ int link_command(const char *file_name) {
 
     // Check if file exists
     if (!check_file_exists(path)) {
-        fprintf(stderr, "ERROR: %s does not exist!\nRun `attic install <file>` to install it\n", file_name);
+        fprintf(stderr, "ERROR: %s does not exist!\nRun 'attic install [FILE]' to install it\n", file_name);
         return EXIT_FAILURE;
     }
 
