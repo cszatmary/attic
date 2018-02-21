@@ -117,6 +117,5 @@ bool check_file_exists(const char *file_name) {
 
 int join_path(const char *path, const char *sub_path, char *full_path, size_t buffer_size) {
     int len = snprintf(full_path, buffer_size, "%s/%s", path, sub_path);
-    printf("Length: %d\n", len);
     return len <= buffer_size ? EXIT_SUCCESS : EXIT_FAILURE;
 }
