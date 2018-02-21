@@ -6,6 +6,7 @@
 #include "utils.h"
 #include "config.h"
 #include "install.h"
+#include "uninstall.h"
 
 typedef int (*command_func)(const char*);
 
@@ -62,6 +63,12 @@ int main(int argc, char **argv) {
 
     if (strcmp(command_name, "install") == 0) {
         command = install;
+    } else if (strcmp(command_name, "uninstall") == 0) {
+        command = uninstall;
+    } else if (strcmp(command_name, "link") == 0) {
+        command = link_command;
+    } else if (strcmp(command_name, "unlink") == 0) {
+        command = unlink_command;
     } else {
         fprintf(stderr, "ERROR: Unrecognized command '%s'\nTry 'attic --help' for more information.\n", command_name);
         return EXIT_FAILURE;
