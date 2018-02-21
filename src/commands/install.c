@@ -8,9 +8,9 @@
 #include <string.h>
 #include "install.h"
 #include "config.h"
-#include "utils.h"
 
 /* Steps taken by install function
+ * Check if file is already installed
  * Check if file exists
  * Check that it's an executable
  * Check that the install directory exists
@@ -20,6 +20,15 @@
 
 int install(const char *file_name) {
     struct stat sb;
+
+    char path[PATH_SIZE];
+    join_path(config_data->install_location, file_name, path, PATH_SIZE);
+
+    verbose_print("Checking if %s is already installed\n", file_name);
+    if (check_file_exists(path)) {
+        printf("%s is already installed!\nTo install a new version use `attic update`\n", file_name);
+        return EXIT_SUCCESS;
+    }
 
     printf("Installing %s ...\n", file_name);
     verbose_print("Checking %s\n", file_name);
@@ -48,12 +57,10 @@ int install(const char *file_name) {
 
     printf("Moving %s to %s\n", file_name, config_data->install_location);
 
-    char path[PATH_SIZE];
-    join_path(config_data->install_location, file_name, path, PATH_SIZE);
-
     copy_file(file_name, path, MAX_RX_PERM);
 
     if (symlink_file(file_name, path) == -1) {
+        printf("Resolve any issues and try again using `attic link`\n");
         return EXIT_FAILURE;
     }
 
