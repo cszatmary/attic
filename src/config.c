@@ -8,7 +8,6 @@
 
 #define DEFAULT_LOCATION "/usr/local/attic"
 #define ATTIC_CONFIG_NAME "attic_config.cfg"
-#define ATTIC_VERSION_NUMBER "0.1.0"
 
 #define ATTIC_INSTALL_LOCATION "install_location"
 
@@ -118,8 +117,4 @@ void free_config() {
 int print_config_error(print_func print, FILE *stream, config_t *cfg) {
     return print(stream, "%s:%d - %s\n", config_error_file(cfg), config_error_line(cfg),
           config_error_text(cfg));
-}
-
-char* get_version_number() {
-    return ATTIC_VERSION_NUMBER;
 }
