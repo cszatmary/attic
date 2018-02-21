@@ -89,6 +89,11 @@ int symlink_file(const char *file_name, const char *full_path) {
     char symlink_path[PATH_SIZE];
     join_path(link_path, file_name, symlink_path, PATH_SIZE);
 
+    if (check_file_exists(symlink_path)) {
+        printf("%s is already symlinked to %s!\n", file_name, link_path);
+        return EXIT_SUCCESS;
+    }
+
     int status = symlink(full_path, symlink_path);
 
     if (status == -1) {
