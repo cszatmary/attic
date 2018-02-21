@@ -15,6 +15,8 @@
 const attic_config *config_data = NULL;
 attic_config *config = NULL;
 
+const char *link_path = "/usr/local/bin";
+
 int generate_new_config() {
     verbose_print("Generating config file.\n");
 
