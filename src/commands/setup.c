@@ -2,7 +2,21 @@
 // Created by Christopher Szatmary on 2018-02-21.
 //
 
+#include <stdlib.h>
+#include "config.h"
 #include "setup.h"
+
+int setup(const char *install_dir) {
+    const char *install_location = install_dir == NULL ? install_dir : default_install_location;
+
+    verbose_print("Checking if install location already exists\n");
+    if (check_file_exists(install_location)) {
+        printf("%s exists.\nattic has already been set up.\n", install_location);
+        return EXIT_SUCCESS;
+    }
+
+
+}
 
 //    char *src = argv[1];
 //    char *dest = argv[2];
