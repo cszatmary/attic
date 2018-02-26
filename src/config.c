@@ -6,7 +6,6 @@
 #include <stdlib.h>
 #include "config.h"
 
-#define DEFAULT_LOCATION "/usr/local/attic"
 #define ATTIC_CONFIG_NAME "attic_config.cfg"
 
 #define ATTIC_INSTALL_LOCATION "install_location"
@@ -14,6 +13,7 @@
 const attic_config *config_data = NULL;
 attic_config *config = NULL;
 
+const char *default_install_location = "/usr/local/attic";
 const char *link_path = "/usr/local/bin";
 
 int generate_new_config() {
@@ -41,7 +41,7 @@ int generate_new_config() {
     // Add install location path to config
     verbose_print("Adding install location to config.\n");
     path_config = config_setting_add(root, ATTIC_INSTALL_LOCATION, CONFIG_TYPE_STRING);
-    config_setting_set_string(path_config, DEFAULT_LOCATION);
+    config_setting_set_string(path_config, default_install_location);
 
     // Write everything to the config file
     verbose_print("Writing to file ...\n");

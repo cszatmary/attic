@@ -14,6 +14,7 @@ typedef struct {
 } attic_config;
 
 extern const attic_config *config_data;
+extern const char *default_install_location;
 extern const char *link_path;
 
 int generate_new_config();
