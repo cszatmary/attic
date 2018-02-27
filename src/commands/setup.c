@@ -3,36 +3,43 @@
 //
 
 #include <stdlib.h>
+#include <errno.h>
+#include <string.h>
+#include <unistd.h>
 #include "config.h"
 #include "setup.h"
 
-int setup(const char *install_dir) {
-    const char *install_location = install_dir == NULL ? install_dir : default_install_location;
+int setup() {
+//    generate_new_config();
+    const char *install_location =  default_install_location;
 
-    verbose_print("Checking if install location already exists\n");
-    if (check_file_exists(install_location)) {
-        printf("%s exists.\nattic has already been set up.\n", install_location);
-        return EXIT_SUCCESS;
+    printf("Setting up attic\nCreating install directory at %s\n", install_location);
+    if (mkdir(install_location, MAX_RX_PERM) == -1) {
+        // Handle mkdir errors
+        if (errno == EEXIST) {
+            printf("%s exists.\nattic has already been set up.\n", install_location);
+            return EXIT_SUCCESS;
+        } else if (errno == EACCES) {
+            fprintf(stderr, "ERROR: You do not have the correct permissions to setup attic.\n"
+                           "Please run 'sudo attic setup' to ensure everything can be setup properly\n");
+            return EXIT_FAILURE;
+        } else {
+            fprintf(stderr, "ERROR: %s\n", strerror(errno));
+            return EXIT_FAILURE;
+        }
     }
 
+    // If sudo attic setup was run change install directory owner to user that made the call
+    if (strcmp(getenv("USER"), "root") == 0) {
+        printf("Changing owner of %s\n", install_location);
+        uid_t uid = (uid_t)strtol(getenv("SUDO_UID"), NULL, 10);
+        gid_t gid = (gid_t)strtol(getenv("SUDO_GID"), NULL, 10);
+        if (chown(install_location, uid, gid) == -1) {
+            fprintf(stderr, "Error changing owner of %s\nError message: %s\n",
+                    install_location, strerror(errno));
+        }
+    }
 
+    printf("Finished setting up attic!\n");
+    return EXIT_SUCCESS;
 }
-
-//    char *src = argv[1];
-//    char *dest = argv[2];
-//
-//    int status = copy_file(src, dest, MAX_RX_PERM);
-//
-//    if (status == -1) {
-//        printf("Error copying. Process unsuccessful.\n");
-//        exit(1);
-//    } else {
-//        printf("Successfully copied file.\n");
-//    }
-//    printf("Status: %d", status);
-//    verbose_print("Install directory does not exist, creating it ...\n");
-//    mkdir(config_data->install_location, MAX_RX_PERM);
-//    perror("mkdir");
-//    verbose_print("Successfully created install directory at %s\n", config_data->install_location);
-
-//    generate_new_config();
