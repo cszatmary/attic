@@ -118,3 +118,9 @@ int print_config_error(print_func print, FILE *stream, config_t *cfg) {
     return print(stream, "%s:%d - %s\n", config_error_file(cfg), config_error_line(cfg),
           config_error_text(cfg));
 }
+
+void static_default_config() {
+    config = malloc(sizeof(attic_config));
+    config->install_location = default_install_location;
+    config_data = config;
+}

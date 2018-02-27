@@ -22,5 +22,6 @@ int load_config();
 int read_config_values(config_t *cfg, attic_config *config_struct);
 void free_config();
 int print_config_error(print_func print, FILE *stream, config_t *cfg);
+void static_default_config();
 
 #endif //ATTIC_CONFIG_H
