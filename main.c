@@ -9,6 +9,7 @@
 #include "uninstall.h"
 #include "setup.h"
 #include "help.h"
+#include "list.h"
 
 typedef int (*command_func)(const char*);
 
@@ -51,25 +52,20 @@ int main(int argc, char **argv) {
         }
     }
 
+    // Check that other arguments were passed
     if (optind >= argc) {
         print_usage();
         return EXIT_FAILURE;
     }
 
-    char *command_name = argv[optind++];
-    char *file_name = argv[optind];
-
-    if (strcmp(command_name, "setup") == 0) {
-        return setup();
-    }
-
-    if (file_name == NULL) {
-        print_usage();
-        return EXIT_FAILURE;
-    }
-
+    // Get command and file name
+    // If no file name is given then the value will be NULL since the last argument is always NULL
+    const char *command_name = argv[optind++];
+    const char *file_name = argv[optind];
     command_func command;
+    bool file_required = true;
 
+    // Check which command was given and set the appropriate function to execute
     if (strcmp(command_name, "install") == 0) {
         command = install;
     } else if (strcmp(command_name, "uninstall") == 0) {
@@ -78,14 +74,32 @@ int main(int argc, char **argv) {
         command = link_command;
     } else if (strcmp(command_name, "unlink") == 0) {
         command = unlink_command;
+    } else if (strcmp(command_name, "setup") == 0) {
+        return setup();
+    } else if (strcmp(command_name, "list") == 0) {
+        command = list_dir_contents;
+        file_required = false;
     } else {
         fprintf(stderr, "ERROR: Unrecognized command '%s'\nTry 'attic --help' for more information.\n", command_name);
+        return EXIT_FAILURE;
+    }
+
+    if (file_required && file_name == NULL) {
+        print_usage();
+        return EXIT_FAILURE;
+    } else if (!file_required && file_name != NULL) {
+        fprintf(stderr, "Error: %s does not required additional arguments.\n", command_name);
         return EXIT_FAILURE;
     }
 
 //    load_config();
     // Use a static config for now, will add proper config later
     static_default_config();
+
+    if (file_name == NULL) {
+        file_name = config_data->install_location;
+    }
+
     command(file_name);
 
     // Cleanup
