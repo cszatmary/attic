@@ -17,10 +17,10 @@
 #define BUFFER_SIZE 8192
 #define PATH_SIZE 512
 
-#define ERROR_READ -1
-#define ERROR_WRITE -2
-#define ERROR_CREATE -3
-#define ACTION_ABORTED -4
+#define ERROR_READ (-1)
+#define ERROR_WRITE (-2)
+#define ERROR_CREATE (-3)
+#define ACTION_ABORTED (-4)
 
 typedef int (*print_func)(FILE*, const char*, ...);
 
