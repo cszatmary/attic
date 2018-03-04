@@ -5,6 +5,7 @@
 #include <string.h>
 #include "utils.h"
 #include "config.h"
+#include "verbose.h"
 #include "install.h"
 #include "uninstall.h"
 #include "setup.h"

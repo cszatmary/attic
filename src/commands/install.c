@@ -8,6 +8,7 @@
 #include <string.h>
 #include "install.h"
 #include "config.h"
+#include "verbose.h"
 
 /* Steps taken by install function
  * Check if file is already installed

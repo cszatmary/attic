@@ -11,8 +11,6 @@
 #include <pwd.h>
 #include "utils.h"
 
-bool verbose = false;
-
 /// Creates a copy of a file at the given destination.
 int copy_file(const char *file_name, const char *destination, mode_t permissions) {
     int src_file_descriptor, dest_file_descriptor;
@@ -56,39 +54,6 @@ int copy_file(const char *file_name, const char *destination, mode_t permissions
     // This way any errors from close are ignored as they generally are of no consequence
     // any previous errors are of greater concern
     errno = error;
-
-    return status;
-}
-
-/// Toggles verbose mode on or off
-void set_verbose(bool value) {
-    verbose = value;
-}
-
-/// Writes output of a given format to the given file if verbose mode is on
-int fverbose_print(FILE *stream, const char *restrict format, ...) {
-    if (!verbose) {
-        return 0;
-    }
-
-    va_list args;
-    va_start(args, format);
-    int status = vfprintf(stream, format, args);
-    va_end(args);
-
-    return status;
-}
-
-/// Writes output of a given format to stdout if verbose mode is on
-int verbose_print(const char *restrict format, ...) {
-    if (!verbose) {
-        return 0;
-    }
-
-    va_list args;
-    va_start(args, format);
-    int status = vprintf(format, args);
-    va_end(args);
 
     return status;
 }

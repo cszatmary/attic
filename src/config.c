@@ -5,6 +5,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include "config.h"
+#include "verbose.h"
 
 #define ATTIC_CONFIG_NAME "attic_config.cfg"
 

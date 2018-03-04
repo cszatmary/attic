@@ -8,6 +8,8 @@
 #include <stdlib.h>
 #include "utils.h"
 #include "list.h"
+#include "color.h"
+#include "verbose.h"
 
 int list_dir_contents(const char *dir_name) {
     DIR *dir = opendir(dir_name);
@@ -21,7 +23,11 @@ int list_dir_contents(const char *dir_name) {
 
     verbose_print("Reading directory contents\n");
     while ((dir_entry = readdir(dir)) != NULL) {
-        printf("%s\n", dir_entry->d_name);
+        if (dir_entry->d_type == DT_DIR && multi_strcmp(dir_entry->d_name, 2, ".", "..") == -1) {
+            printf(COLOR_BLUE "%s\n" COLOR_RESET, dir_entry->d_name);
+        } else if (dir_entry->d_type != DT_DIR) {
+            printf("%s\n", dir_entry->d_name);
+        }
     }
 
     closedir(dir);

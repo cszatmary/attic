@@ -9,6 +9,7 @@
 #include <stdlib.h>
 #include "config.h"
 #include "uninstall.h"
+#include "verbose.h"
 
 /* Steps taken by uninstall function
  * Check if symlink exists in /usr/local/bin

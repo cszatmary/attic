@@ -8,7 +8,7 @@ set(INCLUDE_DIR src src/commands)
 include_directories(/usr/local/include /usr/local/lib)
 find_library(LIB_CONFIG config /usr/local/lib)
 
-add_executable(${PROJECT_NAME} main.c src/utils.c src/utils.h src/config.c src/config.h src/commands/install.c src/commands/install.h src/commands/uninstall.c src/commands/uninstall.h src/commands/setup.c src/commands/setup.h src/commands/help.c src/commands/help.h src/commands/list.c src/commands/list.h)
+add_executable(${PROJECT_NAME} main.c src/utils.c src/utils.h src/config.c src/config.h src/commands/install.c src/commands/install.h src/commands/uninstall.c src/commands/uninstall.h src/commands/setup.c src/commands/setup.h src/commands/help.c src/commands/help.h src/commands/list.c src/commands/list.h src/color.h src/verbose.c src/verbose.h)
 
 target_include_directories(${PROJECT_NAME} PRIVATE ${INCLUDE_DIR})
 target_link_libraries(${PROJECT_NAME} ${LIB_CONFIG})

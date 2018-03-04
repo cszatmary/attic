@@ -25,9 +25,6 @@
 typedef int (*print_func)(FILE*, const char*, ...);
 
 int copy_file(const char *file_name, const char *destination, mode_t permissions);
-void set_verbose(bool value);
-int fverbose_print(FILE *stream, const char *restrict format, ...);
-int verbose_print(const char *restrict format, ...);
 char* get_home_dir();
 bool check_file_exists(const char *file_name);
 int join_path(const char *path, const char *sub_path, char *full_path, size_t buffer_size);
