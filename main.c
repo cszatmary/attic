@@ -6,11 +6,7 @@
 #include "utils.h"
 #include "config.h"
 #include "verbose.h"
-#include "install.h"
-#include "uninstall.h"
-#include "setup.h"
-#include "help.h"
-#include "list.h"
+#include "commands.h"
 
 typedef int (*command_func)(const char*);
 
