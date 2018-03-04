@@ -119,3 +119,28 @@ int join_path(const char *path, const char *sub_path, char *full_path, size_t bu
     int len = snprintf(full_path, buffer_size, "%s/%s", path, sub_path);
     return len <= buffer_size ? EXIT_SUCCESS : EXIT_FAILURE;
 }
+
+/**
+ * \Description The multi_strcmp() function compares multiple given strings against the main string <u>str</u>. This is useful if you need to OR multiple comparisons.
+ * \param str The main string to compare against.
+ * \param count The number of strings being passed.
+ * \param ... The other strings to compare against.
+ * \return If at least one of the strings are equal then the value 0 is returned. Otherwise -1 is returned.
+ * \example
+ * int result = multi_strcmp("yes", 2, "yes", "y");<br>
+ * // result == 0
+ */
+int multi_strcmp(const char *str, int count, ...) {
+    int status = -1;
+    va_list args;
+    va_start(args, count);
+    for (int i = 0; i < count; i++) {
+        if (strcmp(str, va_arg(args, char*)) == 0) {
+            status = 0;
+            break;
+        }
+    }
+    va_end(args);
+
+    return status;
+}
