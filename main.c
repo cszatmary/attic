@@ -62,6 +62,8 @@ int main(int argc, char **argv) {
     command_func command;
     bool file_required = true;
 
+    init_config();
+
     // Check which command was given and set the appropriate function to execute
     if (strcmp(command_name, "install") == 0) {
         command = install;
@@ -72,7 +74,8 @@ int main(int argc, char **argv) {
     } else if (strcmp(command_name, "unlink") == 0) {
         command = unlink_command;
     } else if (strcmp(command_name, "setup") == 0) {
-        return setup();
+        command = setup;
+        file_required = false;
     } else if (strcmp(command_name, "list") == 0) {
         command = list_dir_contents;
         file_required = false;
@@ -87,13 +90,7 @@ int main(int argc, char **argv) {
     } else if (!file_required && file_name != NULL) {
         fprintf(stderr, "Error: %s does not required additional arguments.\n", command_name);
         return EXIT_FAILURE;
-    }
-
-//    load_config();
-    // Use a static config for now, will add proper config later
-    static_default_config();
-
-    if (file_name == NULL) {
+    } else if (file_name == NULL) {
         file_name = config_data->install_location;
     }
 
