@@ -5,23 +5,14 @@
 #ifndef ATTIC_CONFIG_H
 #define ATTIC_CONFIG_H
 
-#include <stdio.h>
-#include <libconfig.h>
-#include "utils.h"
-
 typedef struct {
     const char *install_location;
+    const char *link_path;
 } attic_config;
 
 extern const attic_config *config_data;
-extern const char *default_install_location;
-extern const char *link_path;
 
-int generate_new_config();
-int load_config();
-int read_config_values(config_t *cfg, attic_config *config_struct);
+int init_config();
 void free_config();
-int print_config_error(print_func print, FILE *stream, config_t *cfg);
-void static_default_config();
 
 #endif //ATTIC_CONFIG_H
