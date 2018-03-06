@@ -6,6 +6,7 @@
 #include <unistd.h>
 #include <errno.h>
 #include <string.h>
+#include "utils.h"
 #include "install.h"
 #include "config.h"
 #include "verbose.h"
@@ -22,9 +23,11 @@
 int install(const char *file_name) {
     struct stat sb;
 
+    // Get install path
     char path[PATH_SIZE];
     join_path(config_data->install_location, file_name, path, PATH_SIZE);
 
+    // Check if file is already installed
     verbose_print("Checking if %s is already installed\n", file_name);
     if (check_file_exists(path)) {
         printf("%s is already installed!\nTo install a new version use 'attic update'\n", file_name);
@@ -58,8 +61,10 @@ int install(const char *file_name) {
 
     printf("Moving %s to %s\n", file_name, config_data->install_location);
 
+    // Move to install location
     copy_file(file_name, path, MAX_RX_PERM);
 
+    // Symlink to /usr/local/bin
     if (symlink_file(file_name, path) == -1) {
         printf("Resolve any issues and try again using 'attic link'\n");
         return EXIT_FAILURE;
@@ -85,13 +90,15 @@ int link_command(const char *file_name) {
 }
 
 int symlink_file(const char *file_name, const char *full_path) {
-    printf("Symlinking %s to %s\n", file_name, link_path);
+    printf("Symlinking %s to %s\n", file_name, config_data->link_path);
 
+    // Get symlink path
     char symlink_path[PATH_SIZE];
-    join_path(link_path, file_name, symlink_path, PATH_SIZE);
+    join_path(config_data->link_path, file_name, symlink_path, PATH_SIZE);
 
+    // Check if symlink already exists
     if (check_file_exists(symlink_path)) {
-        printf("%s is already symlinked to %s!\n", file_name, link_path);
+        printf("%s is already symlinked to %s!\n", file_name, config_data->link_path);
         return EXIT_SUCCESS;
     }
 
