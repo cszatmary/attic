@@ -5,6 +5,6 @@
 #ifndef ATTIC_SETUP_H
 #define ATTIC_SETUP_H
 
-int setup();
+int setup(const char *install_location);
 
 #endif //ATTIC_SETUP_H

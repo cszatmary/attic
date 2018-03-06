@@ -6,13 +6,10 @@
 #include <errno.h>
 #include <string.h>
 #include <unistd.h>
-#include "config.h"
+#include "utils.h"
 #include "setup.h"
 
-int setup() {
-//    generate_new_config();
-    const char *install_location =  default_install_location;
-
+int setup(const char *install_location) {
     printf("Setting up attic\nCreating install directory at %s\n", install_location);
     if (mkdir(install_location, MAX_RX_PERM) == -1) {
         // Handle mkdir errors
