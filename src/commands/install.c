@@ -30,7 +30,7 @@ int install(const char *file_name) {
     // Check if file is already installed
     verbose_print("Checking if %s is already installed\n", file_name);
     if (check_file_exists(path)) {
-        printf("%s is already installed!\nTo install a new version use 'attic update'\n", file_name);
+        printf("%s is already installed!\nTo install a new version use 'attic reinstall'\n", file_name);
         return EXIT_SUCCESS;
     }
 
