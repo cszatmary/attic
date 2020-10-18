@@ -8,10 +8,9 @@
 #include <string.h>
 
 #include "verbose.h"
+#include "version.h"
 
 #define BUF_CAP 5
-
-static const char *version = "0.1.0";
 
 struct Cmd root_cmd = {
     .name = "attic",
@@ -116,7 +115,7 @@ enum ErrorCode cmd_parse(int argc, char **argv, struct Cmd **cmd) {
         switch (opt) {
             case 0:
                 if (show_version) {
-                    printf("%s version %s\n", root_cmd.name, version);
+                    printf("%s version %s\n", root_cmd.name, PROJECT_VERSION);
                     return ErrNoErr;
                 }
                 break;
