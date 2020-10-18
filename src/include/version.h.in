@@ -1,0 +1,6 @@
+#ifndef ATTIC_VERSION_H
+#define ATTIC_VERSION_H
+
+#define PROJECT_VERSION "@PROJECT_VERSION@"
+
+#endif  // ATTIC_VERSION_H
