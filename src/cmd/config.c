@@ -11,7 +11,7 @@ struct Cmd config_cmd = {
 };
 
 enum ErrorCode run_config(struct Cmd *cmd) {
-    if (cmd->argc != 1) {
+    if (cmd->argc < 1) {
         return ErrArgsNone;
     }
 
