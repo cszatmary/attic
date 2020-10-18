@@ -1,15 +1,16 @@
-//
-// Created by Christopher Szatmary on 2018-03-03.
-//
-
 #ifndef ATTIC_VERBOSE_H
 #define ATTIC_VERBOSE_H
 
-#include <stdio.h>
 #include <stdbool.h>
+#include <stdio.h>
 
+// set_verbose toggles verbose mode on or off.
 void set_verbose(bool value);
-int fverbose_print(FILE *stream, const char *restrict format, ...);
-int verbose_print(const char *restrict format, ...);
 
-#endif //ATTIC_VERBOSE_H
+// fverbose_printf is like fprintf but only prints if verbose mode is on.
+int fverbose_printf(FILE *stream, const char *restrict format, ...);
+
+// verbose_printf is like printf but only prints if verbose mode is on.
+int verbose_printf(const char *restrict format, ...);
+
+#endif  // ATTIC_VERBOSE_H

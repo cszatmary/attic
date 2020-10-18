@@ -1,18 +1,13 @@
-//
-// Created by Christopher Szatmary on 2018-02-18.
-//
-
 #ifndef ATTIC_CONFIG_H
 #define ATTIC_CONFIG_H
 
-typedef struct {
-    const char *install_location;
-    const char *link_path;
-} attic_config;
+#include "error.h"
 
-extern const attic_config *config_data;
+// config_init loads and initializes the global user configuration.
+// This function is idempotent, calling it multiple times will no-op.
+enum ErrorCode config_init(void);
 
-int init_config();
-void free_config();
+// config_install_location returns the path where attic should install programs.
+const char *config_install_location(void);
 
-#endif //ATTIC_CONFIG_H
+#endif  // ATTIC_CONFIG_H
