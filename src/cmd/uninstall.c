@@ -3,6 +3,7 @@
 #include <unistd.h>
 
 #include "cmd.h"
+#include "color.h"
 #include "config.h"
 #include "util.h"
 #include "verbose.h"
@@ -37,7 +38,7 @@ enum ErrorCode run_uninstall(struct Cmd *cmd) {
         eprintf("Failed to uninstall %s:\n%s\n", filename, strerror(errno));
     }
 
-    printf("Successfully uninstalled %s!\n", filename);
+    printf(GREEN("Successfully uninstalled %s!\n"), filename);
 
     sdsfree(path);
     return ErrNoErr;

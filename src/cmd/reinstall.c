@@ -4,6 +4,7 @@
 #include <unistd.h>
 
 #include "cmd.h"
+#include "color.h"
 #include "config.h"
 #include "util.h"
 #include "verbose.h"
@@ -60,7 +61,7 @@ enum ErrorCode run_reinstall(struct Cmd *cmd) {
                  config_install_location());
     }
 
-    printf("Successfully re-installed %s!\n", filename);
+    printf(GREEN("Successfully re-installed %s!\n"), filename);
 
     sdsfree(path_copy);
     sdsfree(install_path);

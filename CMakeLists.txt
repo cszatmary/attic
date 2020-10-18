@@ -15,6 +15,7 @@ add_executable(${PROJECT_NAME}
     src/cmd/list.c
     src/cmd/reinstall.c
     src/cmd/uninstall.c
+    src/color.c
     src/color.h
     src/config.c
     src/config.h

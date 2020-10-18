@@ -1,8 +1,11 @@
 #include "cmd/cmd.h"
-#include "error.h"
+#include "color.h"
 #include "config.h"
+#include "error.h"
 
 int main(int argc, char **argv) {
+    color_init();
+
     enum ErrorCode code = cmd_init();
     if (code != ErrNoErr) {
         exiterrf(code, "Failed to initialize attic\n");

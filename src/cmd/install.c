@@ -7,6 +7,7 @@
 #include "config.h"
 #include "util.h"
 #include "verbose.h"
+#include "color.h"
 
 struct Cmd install_cmd = {
     .name = "install",
@@ -71,7 +72,7 @@ enum ErrorCode run_install(struct Cmd *cmd) {
                  config_install_location());
     }
 
-    printf("Successfully installed %s!\n", filename);
+    printf(GREEN("Successfully installed %s!\n"), filename);
 
     sdsfree(path_copy);
     sdsfree(install_path);
