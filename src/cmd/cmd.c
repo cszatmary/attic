@@ -10,8 +10,6 @@
 #include "verbose.h"
 #include "version.h"
 
-#define BUF_CAP 5
-
 struct Cmd root_cmd = {
     .name = "attic",
     .desc = "attic is a small program to easily install executables globally.",
@@ -144,64 +142,13 @@ enum ErrorCode cmd_parse(int argc, char **argv, struct Cmd **cmd) {
 }
 
 sds cmd_path(struct Cmd *cmd) {
-    // Temp buffer so we can store commands and concat commands all at once
-    // Preprends are expensive
-    struct Cmd *buf[BUF_CAP];
-    int buf_len = 0;
-
-    // The full path string once built
-    sds path = NULL;
-
-    struct Cmd *c = cmd;
-    while (c != NULL) {
-        // If the buffer is full, we need to empty it before we continue
-        if (buf_len == BUF_CAP) {
-            // Goes backwards from child to parent
-            sds tmp = sdsnew(buf[buf_len - 1]->name);
-            for (int i = buf_len - 2; i >= 0; i--) {
-                tmp = sdscatfmt(tmp, " %s", buf[i]->name);
-            }
-
-            if (path != NULL) {
-                // Create a new string with tmp before existing path
-                sds new_path = sdscatfmt(sdsempty(), "%S %S", tmp, path);
-
-                // Free other strings
-                sdsfree(tmp);
-                sdsfree(path);
-                path = new_path;
-            } else {
-                path = tmp;
-            }
-
-            buf_len = 0;
-        }
-
-        buf[buf_len] = c;
-        buf_len++;
-        c = c->parent;
+    if (cmd->parent == NULL) {
+        return sdsnew(cmd->name);
     }
 
-    // Finished going through all parents, now concat into a single path string
-    // Goes backwards from child to parent
-    sds tmp = sdsnew(buf[buf_len - 1]->name);
-    for (int i = buf_len - 2; i >= 0; i--) {
-        tmp = sdscatfmt(tmp, " %s", buf[i]->name);
-    }
-
-    if (path != NULL) {
-        // Create a new string with tmp before existing path
-        sds new_path = sdscatfmt(sdsempty(), "%S %S", tmp, path);
-
-        // Free other strings
-        sdsfree(tmp);
-        sdsfree(path);
-        path = new_path;
-    } else {
-        path = tmp;
-    }
-
-    return path;
+    sds p = cmd_path(cmd->parent);
+    p = sdscat(p, " ");
+    return sdscat(p, cmd->name);
 }
 
 void cmd_usage(struct Cmd *cmd) {
@@ -226,11 +173,11 @@ void cmd_usage(struct Cmd *cmd) {
 
     eprintf("Flags:\n");
     eprintf("  %-15s Display help for %s\n", "-h, --help", cmd->name);
+    eprintf("  %-15s Enable verbose logging\n", "-v, --verbose");
 
     // If root, print global flags
     // TODO figure out a better way to handle flags
     if (cmd->parent == NULL) {
-        eprintf("  %-15s Enable verbose logging\n", "-v, --verbose");
         eprintf("  %-15s Print the version of %s\n", "--version", cmd->name);
     }
 
