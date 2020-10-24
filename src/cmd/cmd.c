@@ -16,33 +16,38 @@ struct Cmd root_cmd = {
     .arg_desc = "[command]",
 };
 
-enum ErrorCode cmd_init(void) {
-    // Add children to root command
-    // This needs to be updated if more sub commands are added
-    size_t root_children_len = 5;
-    struct Cmd **root_children =
-        malloc(root_children_len * sizeof(struct Cmd *));
-    if (root_children == NULL) {
+enum ErrorCode cmd_add_commands(struct Cmd *cmd, int c, struct Cmd **cmds) {
+    int total_len;
+    if (cmd->children == NULL) {
+        total_len = c;
+        // Make sure it is zero to be safe
+        cmd->len_children = 0;
+        cmd->children = malloc(c * sizeof(struct Cmd *));
+    } else {
+        total_len = cmd->len_children + c;
+        cmd->children = realloc(cmd->children, total_len);
+    }
+
+    if (cmd->children == NULL) {
         return ErrAllocFailed;
     }
 
-    root_children[0] = &install_cmd;
-    root_children[1] = &reinstall_cmd;
-    root_children[2] = &uninstall_cmd;
-    root_children[3] = &list_cmd;
-    root_children[4] = &config_cmd;
+    for (int i = 0; i < c; i++) {
+        // Start after any existing children
+        // If no children, len_children will be 0
+        cmd->children[i + cmd->len_children] = cmds[i];
+        cmds[i]->parent = cmd;
+    }
 
-    root_cmd.children = root_children;
-    root_cmd.len_children = root_children_len;
-
-    // Add parent to children
-    install_cmd.parent = &root_cmd;
-    reinstall_cmd.parent = &root_cmd;
-    uninstall_cmd.parent = &root_cmd;
-    list_cmd.parent = &root_cmd;
-    config_cmd.parent = &root_cmd;
-
+    cmd->len_children = total_len;
     return ErrNoErr;
+}
+
+enum ErrorCode cmd_init(void) {
+    struct Cmd *root_children[] = {&install_cmd, &reinstall_cmd, &uninstall_cmd,
+                                   &list_cmd, &config_cmd};
+    int len = sizeof(root_children) / sizeof(struct Cmd *);
+    return cmd_add_commands(&root_cmd, len, root_children);
 }
 
 enum ErrorCode cmd_parse(int argc, char **argv, struct Cmd **cmd) {
