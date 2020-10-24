@@ -18,6 +18,9 @@ struct Cmd {
     enum ErrorCode (*run)(struct Cmd *cmd);
 };
 
+// cmd_add_commands adds the array of commands as subcommands to the given command.
+enum ErrorCode cmd_add_commands(struct Cmd *cmd, int c, struct Cmd **cmds);
+
 // cmd_init initializes the commands and creates the command tree.
 enum ErrorCode cmd_init(void);
 
